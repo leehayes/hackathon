@@ -43,7 +43,7 @@ class Scraper:
         #Add an event
         self.add_event(self.Event(site="this will be replaced with self.site",
                             description='Exciting stuff is planned!',
-                            datetime='YYYYMMDD HH:MM',
+                            datetime='yyyy-mm-ddThh:mm:ss.000Z',
                             event_url='www.demosite.com/events/exciting',
                             img_urls=['www.123.com/123.jpg', 'www.xx.com/xx.jpg']))
         #Add another event......

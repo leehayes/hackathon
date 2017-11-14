@@ -36,18 +36,18 @@ class Scraper:
         self.scrape()
 
     def add_event(self, event):
-        event = event._replace(site = self.site)
+        event = event._replace(site=self.site)
         self.events.append(event)
 
     def scrape(self):
         #Add an event
-        self.add_event(self.Event(site = "this will be replaced with self.site",
-                            description = 'Exciting stuff is planned!',
-                            datetime = 'YYYYMMDD HH:MM',
-                            event_url = 'www.demosite.com/events/exciting',
-                            img_urls = ['www.123.com/123.jpg', 'www.xx.com/xx.jpg']))
+        self.add_event(self.Event(site="this will be replaced with self.site",
+                            description='Exciting stuff is planned!',
+                            datetime='YYYYMMDD HH:MM',
+                            event_url='www.demosite.com/events/exciting',
+                            img_urls=['www.123.com/123.jpg', 'www.xx.com/xx.jpg']))
         #Add another event......
-        self.add_event(self.Event(description = "Leaving out lots of details. No field is mandatory"))
+        self.add_event(self.Event(description="Leaving out lots of details. No field is mandatory"))
 
     @property
     def results(self):
@@ -56,19 +56,21 @@ class Scraper:
         else:
             return "No Events Found"
 
-
+###############################################################################################################
 #EXAMPLE SCRAPER CLASSES
 
 class Morris(Scraper):
     #http://www.wicket.space/walthamstuff?site=morris
     site = 'morris'
     def scrape(self):
-        self.add_event(self.Event(event_url = "http://www.wmgallery.org.uk/event1"))
+        self.add_event(self.Event(event_url="http://www.wmgallery.org.uk/event1"))
 
 class Mill(Scraper):
     #http://www.wicket.space/walthamstuff?site=mill
     site = 'mill'
     def scrape(self):
-        self.add_event(self.Event(event_url = "http://themille17.org/event1",
-                                    description = "Stuff Happens"))
+        self.add_event(self.Event(event_url="http://themille17.org/event1",
+                                    description="Stuff Happens"))
+        self.add_event(self.Event(event_url="http://themille17.org/event2",
+                                    description="More Stuff Happens"))
 

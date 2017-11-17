@@ -104,7 +104,8 @@ class Hornbeam(Scraper):
         r = requests.get("http://www.hornbeam.org.uk/all-events-at-the-hornbeam/")
         soup = BeautifulSoup(r.text, "lxml")
         # add scraping code here
-        print(soup.findAll('div', attrs={'class':'EventsTable-row'}).get('href'))
+        for row in soup.findAll('div', attrs={'class':'EventsTable-row'}):
+            print(row)
 
         self.add_event(self.Event(event_url="http://themille17.org/event2",
                                   description="More Stuff Happens"))

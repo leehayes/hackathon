@@ -138,10 +138,11 @@ if __name__ == "__main__":
     print(pprint(wg.results))
     m = MillE17()
     print(pprint(m.results))
-    g = MorrisGallery()
-    print(pprint(g.results))
+
+
+
     # pprint(print_scrapers())
     # pprint(AllScrapers().results)
-    print("now get all of them")
-    a = AllScrapers()
-    print(a.results)
+    # print("now get all of them")
+    # a = AllScrapers()
+    # print(a.results)

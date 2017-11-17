@@ -38,7 +38,7 @@ class Scraper:
     inherit in order to serialise the API's json output"""
 
     # Event fields required to be returned from scraping - TBC
-    Event = namedtuple('Event', ['site', 'description', 'datetime', 'event_url', 'img_urls'])
+    Event = namedtuple('Event', ['site', 'description', 'datetime', 'event_url', 'img_urls', 'title'])
     Event.__new__.__defaults__ = (None,) * len(Event._fields)
 
     # http://www.wicket.space/walthamstuff?site=demo
@@ -122,11 +122,28 @@ class MillE17(Scraper):
 
 
 class WalthamForest(Scraper):
+    def __init__(self):
+        super().__init__()
+
     # https://www.walthamforest.gov.uk/events
     site = 'waltham_forest'
 
     def scrape(self):
-        r = requests.get("https://www.walthamforest.gov.uk/events")
+        url = "https://www.walthamforest.gov.uk/events"
+        r = requests.get(url)
+        soup = BeautifulSoup(r.text, 'html.parser')
+        date_months = soup.findAll("div", {"class": "views-field views-field-field-when-is-it-1"})
+        date_days = soup.findAll("div", {"class": "views-field views-field-field-when-is-it-2"})
+        titles = soup.findAll("div", {"class": "views-field views-field-title"})
+        links = soup.findAll("div", {"class": "views-field views-field-view-node"})
+        descriptions = soup.findAll("div", {"class": "views-field views-field-body"})
+
+        for i, title in enumerate(titles):
+            datetime = date_months[i].find("time").attrs['datetime']
+            description = descriptions[i].text
+            link = "".join([url, links[i].find("a").attrs['href']])
+            self.add_event(self.Event(datetime=datetime, title=title.text, description=description, event_url=link))
+
 
 if __name__ == "__main__":
     m = Hornbeam()

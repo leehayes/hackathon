@@ -97,16 +97,28 @@ class MorrisGallery(Scraper):
         self.add_event(self.Event(event_url="http://www.wmgallery.org.uk/event1"))
 
 
+class Hornbeam(Scraper):
+    # http://www.wicket.space/walthamstuff?site=hornbeam
+    site = 'hornbeam'
+    def scrape(self):
+        r = requests.get("http://themille17.org/feed/")
+        soup = BeautifulSoup(r.text, "lxml")
+        # add scraping code here
+        for item in soup.find_all('item'):
+            print(item.find('title'))
+            print(item.find('link'))
+            print(item.find('pubDate'))
+            print(item.find('title'))
+
+        self.add_event(self.Event(event_url="http://themille17.org/event2",
+                                  description="More Stuff Happens"))
+
+
 class MillE17(Scraper):
     # http://www.wicket.space/walthamstuff?site=mill
     site = 'mill'
 
     def scrape(self):
-        r = requests.get("http://themille17.org/feed/")
-        soup = BeautifulSoup(r.text)
-        # add scraping code here
-
-
 
         self.add_event(self.Event(event_url="http://themille17.org/event2",
                                   description="More Stuff Happens"))

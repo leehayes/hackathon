@@ -1,12 +1,10 @@
 # Flask server method - FYI only to show how it works
 
 
+import importlib
 import inspect
 import sys
-from collections import namedtuple
 from pprint import pprint
-import importlib
-
 
 # @app.route('/walthamstuff')
 # def getScrapedStuff():
@@ -15,6 +13,8 @@ import importlib
 #     scraper = scrape.get_scrapers()
 #     scraped_site = scraper[site]()
 #     return jsonify({'data': scraped_site.results})
+from scrapers.millE17 import MillE17
+from scrapers.morrisgallery import MorrisGallery
 
 
 def get_scrapers():
@@ -36,68 +36,18 @@ def print_scrapers():
         pprint(instance.results)
 
 
-class Scraper:
-    """The parent class from which all site scraper classes can
-    inherit in order to serialise the API's json output"""
-
-    # Event fields required to be returned from scraping - TBC
-    Event = namedtuple('Event', ['site', 'description', 'datetime', 'event_url', 'img_urls'])
-    Event.__new__.__defaults__ = (None,) * len(Event._fields)
-
-    # http://www.wicket.space/walthamstuff?site=demo
-    site = 'demo'
-
-    def __init__(self):
-        self.events = []
-        self.scrape()
-
-    def add_event(self, event):
-        event = event._replace(site=self.site)
-        self.events.append(event)
-
-    def scrape(self):
-        # Add an event
-        self.add_event(self.Event(site="this will be replaced with self.site",
-                                  description='Exciting stuff is planned!',
-                                  datetime='yyyy-mm-ddThh:mm:ss.000Z',
-                                  event_url='www.demosite.com/events/exciting',
-                                  img_urls=['www.123.com/123.jpg', 'www.xx.com/xx.jpg']))
-        # Add another event......
-        self.add_event(self.Event(description="Leaving out lots of details. No field is mandatory"))
-
-    @property
-    def results(self):
-        if self.events:
-            return self.events
-        else:
-            return "No Events Found"
-
-
 ###############################################################################################################
 # EXAMPLE SCRAPER CLASSES
 
-class Morris(Scraper):
-    # http://www.wicket.space/walthamstuff?site=morris
-    site = 'morris'
-
-    def scrape(self):
-        # add scraping code here
-        self.add_event(self.Event(event_url="http://www.wmgallery.org.uk/event1"))
+class Morris(MorrisGallery):
+    pass
 
 
-class Mill(Scraper):
-    # http://www.wicket.space/walthamstuff?site=mill
-    site = 'mill'
-
-    def scrape(self):
-        # add scraping code here
-        self.add_event(self.Event(event_url="http://themille17.org/event1",
-                                  description="Stuff Happens"))
-        self.add_event(self.Event(event_url="http://themille17.org/event2",
-                                  description="More Stuff Happens"))
+class Mill(MillE17):
+    pass
 
 
 if __name__ == "__main__":
-    # m = Mill()
+    # m = MillE17()
     # print(pprint(m.results))
     pprint(print_scrapers())

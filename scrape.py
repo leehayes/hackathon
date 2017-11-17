@@ -98,17 +98,13 @@ class MorrisGallery(Scraper):
 
 
 class Hornbeam(Scraper):
-    # http://www.wicket.space/walthamstuff?site=hornbeam
+    # http://www.hornbeam.org.uk/feed/
     site = 'hornbeam'
     def scrape(self):
-        r = requests.get("http://themille17.org/feed/")
+        r = requests.get("http://www.hornbeam.org.uk/all-events-at-the-hornbeam/")
         soup = BeautifulSoup(r.text, "lxml")
         # add scraping code here
-        for item in soup.find_all('item'):
-            print(item.find('title'))
-            print(item.find('link'))
-            print(item.find('pubDate'))
-            print(item.find('title'))
+        print(soup.findAll('div', attrs={'class':'EventsTable-row'}).get('href'))
 
         self.add_event(self.Event(event_url="http://themille17.org/event2",
                                   description="More Stuff Happens"))
@@ -132,7 +128,7 @@ class WalthamForest(Scraper):
         r = requests.get("https://www.walthamforest.gov.uk/events")
 
 if __name__ == "__main__":
-    m = MillE17()
+    m = Hornbeam()
     print(pprint(m.results))
 
 

@@ -4,6 +4,9 @@ import sys
 from collections import namedtuple
 from pprint import pprint
 
+import requests
+from bs4 import BeautifulSoup
+
 
 class ScraperAccess(object):
     @staticmethod
@@ -105,6 +108,13 @@ class MillE17(Scraper):
         self.add_event(self.Event(event_url="http://themille17.org/event2",
                                   description="More Stuff Happens"))
 
+
+class WalthamForest(Scraper):
+    # https://www.walthamforest.gov.uk/events
+    site = 'waltham_forest'
+
+    def scrape(self):
+        r = requests.get("https://www.walthamforest.gov.uk/events")
 
 if __name__ == "__main__":
     m = MillE17()

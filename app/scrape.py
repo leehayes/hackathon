@@ -1,4 +1,13 @@
-#Flask server method - FYI only to show how it works
+# Flask server method - FYI only to show how it works
+
+
+import inspect
+import sys
+from collections import namedtuple
+from pprint import pprint
+import importlib
+
+
 # @app.route('/walthamstuff')
 # def getScrapedStuff():
 #     #http://www.wicket.space/walthamstuff?site=sitename
@@ -7,8 +16,6 @@
 #     scraped_site = scraper[site]()
 #     return jsonify({'data': scraped_site.results})
 
-import sys, inspect
-from collections import namedtuple
 
 def get_scrapers():
     """Provides the service with a dict of available scraper classes
@@ -20,15 +27,24 @@ def get_scrapers():
     return scraper_dict
 
 
+def print_scrapers():
+    scrapers = get_scrapers()
+    for scraper in scrapers:
+        scraper_name = scrapers[scraper].__name__
+        this_scraper = getattr(importlib.import_module("app.scrape"), scraper_name)
+        instance = this_scraper()
+        pprint(instance.results)
+
+
 class Scraper:
     """The parent class from which all site scraper classes can
     inherit in order to serialise the API's json output"""
 
-    #Event fields required to be returned from scraping - TBC
+    # Event fields required to be returned from scraping - TBC
     Event = namedtuple('Event', ['site', 'description', 'datetime', 'event_url', 'img_urls'])
     Event.__new__.__defaults__ = (None,) * len(Event._fields)
 
-    #http://www.wicket.space/walthamstuff?site=demo
+    # http://www.wicket.space/walthamstuff?site=demo
     site = 'demo'
 
     def __init__(self):
@@ -40,13 +56,13 @@ class Scraper:
         self.events.append(event)
 
     def scrape(self):
-        #Add an event
+        # Add an event
         self.add_event(self.Event(site="this will be replaced with self.site",
-                            description='Exciting stuff is planned!',
-                            datetime='yyyy-mm-ddThh:mm:ss.000Z',
-                            event_url='www.demosite.com/events/exciting',
-                            img_urls=['www.123.com/123.jpg', 'www.xx.com/xx.jpg']))
-        #Add another event......
+                                  description='Exciting stuff is planned!',
+                                  datetime='yyyy-mm-ddThh:mm:ss.000Z',
+                                  event_url='www.demosite.com/events/exciting',
+                                  img_urls=['www.123.com/123.jpg', 'www.xx.com/xx.jpg']))
+        # Add another event......
         self.add_event(self.Event(description="Leaving out lots of details. No field is mandatory"))
 
     @property
@@ -56,23 +72,32 @@ class Scraper:
         else:
             return "No Events Found"
 
+
 ###############################################################################################################
-#EXAMPLE SCRAPER CLASSES
+# EXAMPLE SCRAPER CLASSES
 
 class Morris(Scraper):
-    #http://www.wicket.space/walthamstuff?site=morris
+    # http://www.wicket.space/walthamstuff?site=morris
     site = 'morris'
+
     def scrape(self):
-        #add scraping code here
+        # add scraping code here
         self.add_event(self.Event(event_url="http://www.wmgallery.org.uk/event1"))
 
-class Mill(Scraper):
-    #http://www.wicket.space/walthamstuff?site=mill
-    site = 'mill'
-    def scrape(self):
-        #add scraping code here
-        self.add_event(self.Event(event_url="http://themille17.org/event1",
-                                    description="Stuff Happens"))
-        self.add_event(self.Event(event_url="http://themille17.org/event2",
-                                    description="More Stuff Happens"))
 
+class Mill(Scraper):
+    # http://www.wicket.space/walthamstuff?site=mill
+    site = 'mill'
+
+    def scrape(self):
+        # add scraping code here
+        self.add_event(self.Event(event_url="http://themille17.org/event1",
+                                  description="Stuff Happens"))
+        self.add_event(self.Event(event_url="http://themille17.org/event2",
+                                  description="More Stuff Happens"))
+
+
+if __name__ == "__main__":
+    # m = Mill()
+    # print(pprint(m.results))
+    pprint(print_scrapers())

@@ -72,6 +72,11 @@ class Scraper:
 #     scraped_site = scraper[site]()
 #     return jsonify({'data': scraped_site.results})
 
+class AllScrapers(Scraper):
+    site = 'All'
+    print_scrapers()
+
+
 class MorrisGallery(Scraper):
     # http://www.wicket.space/walthamstuff?site=morris
     site = 'morris'
@@ -96,4 +101,5 @@ class MillE17(Scraper):
 if __name__ == "__main__":
     # m = MillE17()
     # print(pprint(m.results))
-    pprint(print_scrapers())
+    # pprint(print_scrapers())
+    pprint(AllScrapers().results)

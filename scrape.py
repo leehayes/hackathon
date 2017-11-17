@@ -73,7 +73,7 @@ class Scraper:
 #     return jsonify({'data': scraped_site.results})
 
 class AllScrapers(Scraper):
-    site = 'All'
+    site = 'all'
     print_scrapers()
 
 

@@ -5,23 +5,29 @@ from collections import namedtuple
 from pprint import pprint
 
 
-def get_scrapers():
-    """Provides the service with a dict of available scraper classes
-    and the required value (site) to call each - No need to edit """
-    cls_members = inspect.getmembers(sys.modules[__name__], inspect.isclass)
-    scraper_dict = {}
-    for cls in cls_members:
-        scraper_dict[cls[1].site] = cls[1]
-    return scraper_dict
+class ScraperAccess(object):
+    @staticmethod
+    def get_scrapers():
+        """Provides the service with a dict of available scraper classes
+        and the required value (site) to call each - No need to edit """
+        cls_members = inspect.getmembers(sys.modules[__name__], inspect.isclass)
+        scraper_dict = {}
+        for cls in cls_members:
+            try:
+                scraper_dict[cls[1].site] = cls[1]
+            except Exception as e:
+                print(e)
+        return scraper_dict
 
-
-def print_scrapers():
-    scrapers = get_scrapers()
-    for scraper in scrapers:
-        scraper_name = scrapers[scraper].__name__
-        this_scraper = getattr(importlib.import_module("scrape"), scraper_name)
-        instance = this_scraper()
-        pprint(instance.results)
+    @staticmethod
+    def print_scrapers():
+        scrapers = ScraperAccess.get_scrapers()
+        for scraper in scrapers:
+            scraper_name = scrapers[scraper].__name__
+            if scraper_name is not 'AllScrapers':
+                this_scraper = getattr(importlib.import_module("scrape"), scraper_name)
+                instance = this_scraper()
+                pprint(instance.results)
 
 
 class Scraper:
@@ -74,7 +80,9 @@ class Scraper:
 
 class AllScrapers(Scraper):
     site = 'all'
-    print_scrapers()
+
+    def scrape(self):
+        ScraperAccess.print_scrapers()
 
 
 class MorrisGallery(Scraper):
@@ -99,7 +107,12 @@ class MillE17(Scraper):
 
 
 if __name__ == "__main__":
-    # m = MillE17()
-    # print(pprint(m.results))
+    m = MillE17()
+    print(pprint(m.results))
+    g = MorrisGallery()
+    print(pprint(g.results))
     # pprint(print_scrapers())
-    pprint(AllScrapers().results)
+    # pprint(AllScrapers().results)
+    print("now get all of them")
+    a = AllScrapers()
+    print(a.results)

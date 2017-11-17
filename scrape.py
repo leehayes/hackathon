@@ -102,9 +102,12 @@ class MillE17(Scraper):
     site = 'mill'
 
     def scrape(self):
+        r = requests.get("http://themille17.org/feed/")
+        soup = BeautifulSoup(r.text)
         # add scraping code here
-        self.add_event(self.Event(event_url="http://themille17.org/event1",
-                                  description="Stuff Happens"))
+
+
+
         self.add_event(self.Event(event_url="http://themille17.org/event2",
                                   description="More Stuff Happens"))
 

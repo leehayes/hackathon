@@ -31,7 +31,7 @@ def print_scrapers():
     scrapers = get_scrapers()
     for scraper in scrapers:
         scraper_name = scrapers[scraper].__name__
-        this_scraper = getattr(importlib.import_module("app.scrape"), scraper_name)
+        this_scraper = getattr(importlib.import_module("scrape"), scraper_name)
         instance = this_scraper()
         pprint(instance.results)
 

@@ -1,20 +1,10 @@
-# Flask server method - FYI only to show how it works
-
-
 import importlib
 import inspect
 import sys
 from pprint import pprint
 
-# @app.route('/walthamstuff')
-# def getScrapedStuff():
-#     #http://www.wicket.space/walthamstuff?site=sitename
-#     site = request.args.get('site')
-#     scraper = scrape.get_scrapers()
-#     scraped_site = scraper[site]()
-#     return jsonify({'data': scraped_site.results})
-from scrapers.millE17 import MillE17
-from scrapers.morrisgallery import MorrisGallery
+from millE17 import MillE17
+from morrisgallery import MorrisGallery
 
 
 def get_scrapers():
@@ -38,6 +28,14 @@ def print_scrapers():
 
 ###############################################################################################################
 # EXAMPLE SCRAPER CLASSES
+
+# @app.route('/walthamstuff')
+# def getScrapedStuff():
+#     #http://www.wicket.space/walthamstuff?site=sitename
+#     site = request.args.get('site')
+#     scraper = scrape.get_scrapers()
+#     scraped_site = scraper[site]()
+#     return jsonify({'data': scraped_site.results})
 
 class Morris(MorrisGallery):
     pass

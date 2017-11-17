@@ -1,4 +1,4 @@
-from scrapers.scraper import Scraper
+from scraper import Scraper
 
 
 class MorrisGallery(Scraper):

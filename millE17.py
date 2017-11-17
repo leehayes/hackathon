@@ -1,4 +1,4 @@
-from scrapers.scraper import Scraper
+from scraper import Scraper
 
 
 class MillE17(Scraper):

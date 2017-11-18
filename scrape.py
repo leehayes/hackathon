@@ -106,26 +106,26 @@ class Hornbeam(Scraper):
         # add scraping code here
         events = soup.find_all(class_='EventsTable-eventName')
         for event in events:
-            print(event.text)
-            print(event.find('a')['href'])
+            title = event.text
+            event_url = event.find('a')['href']
             s = requests.get(event.find('a')['href'])
             soup = BeautifulSoup(s.text, "lxml")
             try:
-                x = soup.find(class_='post-thumbnail').find('img')['src']
-                print(x)
+                img_urls = []
+                img_urls.append(soup.find(class_='post-thumbnail').find('img')['src'])
             except:
                 pass
 
             try:
-                x = soup.find(class_='post-content')
-                #print(x.text)
+                description = soup.find(class_='post-content').text
             except:
                 pass
 
 
-
-        self.add_event(self.Event(event_url="http://themille17.org/event2",
-                                  description="More Stuff Happens"))
+            self.add_event(self.Event(title=title,
+                                      description=description,
+                                      event_url=event_url,
+                                      img_urls=img_urls))
 
 
 class MillE17(Scraper):

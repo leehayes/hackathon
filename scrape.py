@@ -88,6 +88,26 @@ class AllScrapers(Scraper):
         ScraperAccess.print_scrapers()
 
 
+class TicketLab(Scraper):
+    # http://www.wicket.space/walthamstuff?site=ticketlab
+    site = 'ticketlab'
+
+    def scrape(self):
+        # add scraping code here
+        r = requests.get("https://ticketlab.co.uk/events/e17")
+        soup = BeautifulSoup(r.text, "lxml")
+        events = soup.find_all(class_ = "Listings-item")
+        for event in events:
+            event_url = event.find('a')['href']
+
+            self.add_event(self.Event(event_url=event_url))
+            r = requests.get(event_url)
+            soup = BeautifulSoup(r.text, "lxml")
+            elems = soup.find_all('h1')
+            for elem in elems:
+                print(elem.find_all('span'))
+                #//*[@id="main-content"]/section/div[1]/div/h2[2]
+
 class MorrisGallery(Scraper):
     # http://www.wicket.space/walthamstuff?site=morris
     site = 'morris'
@@ -163,7 +183,7 @@ class WalthamForest(Scraper):
 
 
 if __name__ == "__main__":
-    m = Hornbeam()
+    m = TicketLab()
     print(pprint(m.results))
 
 
